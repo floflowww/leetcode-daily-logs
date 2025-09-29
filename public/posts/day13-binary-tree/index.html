@@ -7,9 +7,29 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Day13 - Binary Tree | Flo Leetcode 算法营 Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="hi
-asdljfahs
-">
+<meta name="description" content="medium把我封了。。。。申诉也没人理我
+本来想用wix之类的别的网站，但是我怕它们又莫名其妙封我，干脆自己建了一个小小的博客，反正全是static pages。不过不能用我的大号建repo，因为公司有很多开源的东西用的个人账号，所以同事们都能看到我在做啥（x
+甚至还可以评论：Hugo ships with support for Disqus, a third-party service that provides comment and community capabilities to websites via JavaScript.
+
+今天复习二叉树！
+
+完全二叉树：除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层最左边的若干位置
+二叉搜索树： leftChild.val &lt; curr.val &lt; rightChild.val
+平衡二叉搜索树：|leftChild.height - rightChild.height| &lt;= 1 for every node
+
+二叉树的存储方式：
+
+链式存储：通过指针把分布在各个地址的节点串联一起
+顺序存储：用数组来存储。如果父节点的数组下标是 i，那么它的左孩子就是 i * 2 &#43; 1，右孩子就是 i * 2 &#43; 2。
+
+二叉树的遍历方法：
+
+DFS：preorder, postorder, inorder
+BFS：level order
+
+
+144, 145, 94 (basic DFS)
+102, 107, 199, 637, 429, 515, 116, 117, 104, 111 (BFS)">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/day13-binary-tree/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.a090830a421002426baafbd314e38f149d77b4c48a12ee9312700d770b27fb26.css" integrity="sha256-oJCDCkIQAkJrqvvTFOOPFJ13tMSKEu6TEnANdwsn&#43;yY=" rel="preload stylesheet" as="style">
@@ -114,9 +134,619 @@ asdljfahs
     <div class="post-meta"><span title='2025-09-28 16:29:22 -0700 PDT'>September 28, 2025</span>
 
 </div>
-  </header> 
-  <div class="post-content"><p>hi</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>asdljfahs
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#dfs" aria-label="DFS">DFS</a><ul>
+                        
+                <li>
+                    <a href="#144-binary-tree-preorder-traversal" aria-label="144. Binary Tree Preorder Traversal">144. Binary Tree Preorder Traversal</a><ul>
+                        
+                <li>
+                    <a href="#recursion" aria-label="Recursion">Recursion</a></li>
+                <li>
+                    <a href="#iteration" aria-label="Iteration">Iteration</a></li></ul>
+                </li>
+                <li>
+                    <a href="#145-binary-tree-postorder-traversal" aria-label="145. Binary Tree Postorder Traversal">145. Binary Tree Postorder Traversal</a><ul>
+                        
+                <li>
+                    <a href="#recursion-1" aria-label="Recursion">Recursion</a></li>
+                <li>
+                    <a href="#iteration-1" aria-label="Iteration 1">Iteration 1</a></li>
+                <li>
+                    <a href="#iteration-2" aria-label="Iteration 2">Iteration 2</a></li></ul>
+                </li>
+                <li>
+                    <a href="#94-binary-tree-inorder-traversal" aria-label="94. Binary Tree Inorder Traversal">94. Binary Tree Inorder Traversal</a><ul>
+                        
+                <li>
+                    <a href="#recursion-2" aria-label="Recursion">Recursion</a></li>
+                <li>
+                    <a href="#iteration-1-1" aria-label="Iteration 1">Iteration 1</a></li>
+                <li>
+                    <a href="#iteration-2-1" aria-label="Iteration 2">Iteration 2</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#bfs" aria-label="BFS">BFS</a><ul>
+                        
+                <li>
+                    <a href="#102-binary-tree-level-order-traversal" aria-label="102. Binary Tree Level Order Traversal">102. Binary Tree Level Order Traversal</a><ul>
+                        
+                <li>
+                    <a href="#iteration-3" aria-label="Iteration">Iteration</a></li>
+                <li>
+                    <a href="#recursion-3" aria-label="Recursion">Recursion</a></li></ul>
+                </li>
+                <li>
+                    <a href="#107-binary-tree-level-order-traversal-ii" aria-label="107. Binary Tree Level Order Traversal II">107. Binary Tree Level Order Traversal II</a></li>
+                <li>
+                    <a href="#199-binary-tree-right-side-view" aria-label="199. Binary Tree Right Side View">199. Binary Tree Right Side View</a></li>
+                <li>
+                    <a href="#637-average-of-levels-in-binary-tree" aria-label="637. Average of Levels in Binary Tree">637. Average of Levels in Binary Tree</a></li>
+                <li>
+                    <a href="#429-n-ary-tree-level-order-traversal" aria-label="429. N-ary Tree Level Order Traversal">429. N-ary Tree Level Order Traversal</a></li>
+                <li>
+                    <a href="#515-find-largest-value-in-each-tree-row" aria-label="515. Find Largest Value in Each Tree Row">515. Find Largest Value in Each Tree Row</a></li>
+                <li>
+                    <a href="#116-populating-next-right-pointers-in-each-node" aria-label="116. Populating Next Right Pointers in Each Node">116. Populating Next Right Pointers in Each Node</a></li>
+                <li>
+                    <a href="#117-populating-next-right-pointers-in-each-node-ii" aria-label="117. Populating Next Right Pointers in Each Node II">117. Populating Next Right Pointers in Each Node II</a></li>
+                <li>
+                    <a href="#104-maximum-depth-of-binary-tree" aria-label="104. Maximum Depth of Binary Tree">104. Maximum Depth of Binary Tree</a></li>
+                <li>
+                    <a href="#111-minimum-depth-of-binary-tree" aria-label="111. Minimum Depth of Binary Tree">111. Minimum Depth of Binary Tree</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>medium把我封了。。。。申诉也没人理我</p>
+<p>本来想用wix之类的别的网站，但是我怕它们又莫名其妙封我，干脆自己建了一个小小的博客，反正全是static pages。不过不能用我的大号建repo，因为公司有很多开源的东西用的个人账号，所以同事们都能看到我在做啥（x</p>
+<p>甚至还可以评论：Hugo ships with support for Disqus, a third-party service that provides comment and community capabilities to websites via JavaScript.</p>
+<hr>
+<p>今天复习二叉树！</p>
+<ul>
+<li><strong>完全二叉树</strong>：除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层<em>最左边</em>的若干位置</li>
+<li><strong>二叉搜索树</strong>： <code>leftChild.val &lt; curr.val &lt; rightChild.val</code></li>
+<li><strong>平衡二叉搜索树</strong>：<code>|leftChild.height - rightChild.height| &lt;= 1</code> for every node</li>
+</ul>
+<p>二叉树的存储方式：</p>
+<ul>
+<li><strong>链式存储</strong>：通过指针把分布在各个地址的节点串联一起</li>
+<li><strong>顺序存储</strong>：用数组来存储。如果父节点的数组下标是 i，那么它的左孩子就是 <code>i * 2 + 1</code>，右孩子就是 <code>i * 2 + 2</code>。</li>
+</ul>
+<p>二叉树的遍历方法：</p>
+<ul>
+<li><strong>DFS</strong>：preorder, postorder, inorder</li>
+<li><strong>BFS</strong>：level order</li>
+</ul>
+<hr>
+<p>144, 145, 94 (basic DFS)</p>
+<p>102, 107, 199, 637, 429, 515, 116, 117, 104, 111 (BFS)</p>
+<hr>
+<h2 id="dfs">DFS<a hidden class="anchor" aria-hidden="true" href="#dfs">#</a></h2>
+<h3 id="144-binary-tree-preorder-traversal"><a href="https://leetcode.com/problems/binary-tree-preorder-traversal/">144. Binary Tree Preorder Traversal</a><a hidden class="anchor" aria-hidden="true" href="#144-binary-tree-preorder-traversal">#</a></h3>
+<p>preorder: 第⼀个是根节点的值，接着是左⼦树，最后是右⼦树</p>
+<h4 id="recursion">Recursion<a hidden class="anchor" aria-hidden="true" href="#recursion">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">preorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        traverse(root);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        res.<span style="color:#a6e22e">add</span>(root.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>        traverse(root.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>        traverse(root.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="iteration">Iteration<a hidden class="anchor" aria-hidden="true" href="#iteration">#</a></h4>
+<p>用stack，右孩子先入栈，左孩子再入栈，这样左孩子可以先出栈</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">preorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Stack<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> stack <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Stack<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        stack.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>stack.<span style="color:#a6e22e">empty</span>()) {
+</span></span><span style="display:flex;"><span>            TreeNode curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span><span style="color:#f92672">!=</span><span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span><span style="color:#f92672">!=</span><span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="145-binary-tree-postorder-traversal"><a href="https://leetcode.com/problems/binary-tree-postorder-traversal/">145. Binary Tree Postorder Traversal</a><a hidden class="anchor" aria-hidden="true" href="#145-binary-tree-postorder-traversal">#</a></h3>
+<h4 id="recursion-1">Recursion<a hidden class="anchor" aria-hidden="true" href="#recursion-1">#</a></h4>
+<p>postorder: 先是左⼦树，接着是右⼦树，最后是根节点的值</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">postorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        traverse(root);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(TreeNode curr) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>        res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="iteration-1">Iteration 1<a hidden class="anchor" aria-hidden="true" href="#iteration-1">#</a></h4>
+<p>用stack，和preorder差不多，唯一区别是我们最后要反转res。这样的话入栈顺序是：先左再右，这样右孩子先出栈，res里的顺序就是中-右-左，反转之后就是左-右-中了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">postorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Stack<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> stack <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Stack<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        stack.<span style="color:#a6e22e">add</span> (root);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>stack.<span style="color:#a6e22e">empty</span>()) {
+</span></span><span style="display:flex;"><span>            TreeNode curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span><span style="color:#f92672">!=</span><span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span><span style="color:#f92672">!=</span><span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Collections.<span style="color:#a6e22e">reverse</span>(res);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="iteration-2">Iteration 2<a hidden class="anchor" aria-hidden="true" href="#iteration-2">#</a></h4>
+<p>同样是stack，怎么做到最后处理root？</p>
+<p>遇到root的时候：把它放回堆里再用null标记，再先右后左放进堆里，这样左孩子会先出栈，然后是右孩子，最后才是根。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">postorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Stack<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> stack <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Stack<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        stack.<span style="color:#a6e22e">add</span> (root);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>stack.<span style="color:#a6e22e">empty</span>()) {
+</span></span><span style="display:flex;"><span>            TreeNode curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                stack.<span style="color:#a6e22e">push</span>(curr);
+</span></span><span style="display:flex;"><span>                stack.<span style="color:#a6e22e">push</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">push</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">push</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>                res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="94-binary-tree-inorder-traversal"><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/description/">94. Binary Tree Inorder Traversal</a><a hidden class="anchor" aria-hidden="true" href="#94-binary-tree-inorder-traversal">#</a></h3>
+<h4 id="recursion-2">Recursion<a hidden class="anchor" aria-hidden="true" href="#recursion-2">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">inorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        traverse(root);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(TreeNode curr) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>        res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="iteration-1-1">Iteration 1<a hidden class="anchor" aria-hidden="true" href="#iteration-1-1">#</a></h4>
+<p>还是用stack，每次在检查curr之前都先走到最左。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">inorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Stack<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> stack <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Stack<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        TreeNode curr <span style="color:#f92672">=</span> root;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (curr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> <span style="color:#f92672">!</span>stack.<span style="color:#a6e22e">empty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// go to leftest</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (curr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                stack.<span style="color:#a6e22e">add</span>(curr);
+</span></span><span style="display:flex;"><span>                curr <span style="color:#f92672">=</span> curr.<span style="color:#a6e22e">left</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// root</span>
+</span></span><span style="display:flex;"><span>            curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// right</span>
+</span></span><span style="display:flex;"><span>            curr <span style="color:#f92672">=</span> curr.<span style="color:#a6e22e">right</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="iteration-2-1">Iteration 2<a hidden class="anchor" aria-hidden="true" href="#iteration-2-1">#</a></h4>
+<p>同样用null标记根，入栈顺序是反过来的右-中-左</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">inorderTraversal</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Stack<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> stack <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Stack<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            stack.<span style="color:#a6e22e">push</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>stack.<span style="color:#a6e22e">empty</span>()) {
+</span></span><span style="display:flex;"><span>            TreeNode curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">push</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>                stack.<span style="color:#a6e22e">push</span>(curr);
+</span></span><span style="display:flex;"><span>                stack.<span style="color:#a6e22e">push</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) stack.<span style="color:#a6e22e">push</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>                curr <span style="color:#f92672">=</span> stack.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>                res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="bfs">BFS<a hidden class="anchor" aria-hidden="true" href="#bfs">#</a></h2>
+<h3 id="102-binary-tree-level-order-traversal"><a href="https://leetcode.com/problems/binary-tree-level-order-traversal/description/">102. Binary Tree Level Order Traversal</a><a hidden class="anchor" aria-hidden="true" href="#102-binary-tree-level-order-traversal">#</a></h3>
+<p>BFS的话迭代更简单。</p>
+<h4 id="iteration-3">Iteration<a hidden class="anchor" aria-hidden="true" href="#iteration-3">#</a></h4>
+<p>两个queue，一个记录node，一个记录level</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">levelOrder</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> level <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>            level.<span style="color:#a6e22e">add</span>(0);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> currLevel <span style="color:#f92672">=</span> level.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (res.<span style="color:#a6e22e">size</span>() <span style="color:#f92672">&lt;=</span> currLevel) {
+</span></span><span style="display:flex;"><span>                res.<span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span>());
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">get</span>(currLevel).<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                level.<span style="color:#a6e22e">add</span>(currLevel<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>                level.<span style="color:#a6e22e">add</span>(currLevel<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>更好的方法：我们可以记录每一层的size，用while loop来遍历这一层，这样就不需要两个queue了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">levelOrder</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> level <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (levelSize<span style="color:#f92672">--</span> <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                level.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(level);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="recursion-3">Recursion<a hidden class="anchor" aria-hidden="true" href="#recursion-3">#</a></h4>
+<p>其实还是DFS,就是多pass in一个level param，只要确保左在右前面处理就行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">levelOrder</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        traverse(root, 0);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(TreeNode curr, <span style="color:#66d9ef">int</span> level) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (level <span style="color:#f92672">&gt;=</span> res.<span style="color:#a6e22e">size</span>()) {
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        res.<span style="color:#a6e22e">get</span>(level).<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">left</span>, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">right</span>, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="107-binary-tree-level-order-traversal-ii"><a href="https://leetcode.com/problems/binary-tree-level-order-traversal-ii/description/">107. Binary Tree Level Order Traversal II</a><a hidden class="anchor" aria-hidden="true" href="#107-binary-tree-level-order-traversal-ii">#</a></h3>
+<p>用arraylist，每次从最前面添加新level（或者按正常顺序加，最后reverse)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">levelOrderBottom</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> level <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (levelSize<span style="color:#f92672">--</span> <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                level.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(0, level);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="199-binary-tree-right-side-view"><a href="https://leetcode.com/problems/binary-tree-right-side-view/">199. Binary Tree Right Side View</a><a hidden class="anchor" aria-hidden="true" href="#199-binary-tree-right-side-view">#</a></h3>
+<p>BFS做法：每次只加入level的最后一个元素</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">rightSideView</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (levelSize<span style="color:#f92672">--</span> <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (levelSize <span style="color:#f92672">==</span> 0) res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);  <span style="color:#75715e">// 只加level的最后一个元素</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>DFS做法：如果这一层已经有元素了就不加入。</p>
+<p>确保先处理右再处理左。root什么时候处理不重要，因为它和children不在同一个level</p>
+<p>因为先右后左，所以这一层加入的第一个元素一定是最右的元素。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">rightSideView</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        traverse(root,0);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(TreeNode curr, <span style="color:#66d9ef">int</span> level) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (level <span style="color:#f92672">&gt;=</span> res.<span style="color:#a6e22e">size</span>()) {  <span style="color:#75715e">// 这一层加入的第一个元素</span>
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">right</span>, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">left</span>, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="637-average-of-levels-in-binary-tree"><a href="https://leetcode.com/problems/average-of-levels-in-binary-tree/">637. Average of Levels in Binary Tree</a><a hidden class="anchor" aria-hidden="true" href="#637-average-of-levels-in-binary-tree">#</a></h3>
+<p>计算平均数instead of 添加整层的列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Double<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">averageOfLevels</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>Double<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">double</span> total <span style="color:#f92672">=</span> 0.<span style="color:#a6e22e">0</span>;    <span style="color:#75715e">// make sure to use double here，不然会整数溢出</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0; i <span style="color:#f92672">&lt;</span> levelSize; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                total <span style="color:#f92672">+=</span> curr.<span style="color:#a6e22e">val</span>;  
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(total <span style="color:#f92672">/</span> levelSize);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="429-n-ary-tree-level-order-traversal"><a href="https://leetcode.com/problems/n-ary-tree-level-order-traversal/">429. N-ary Tree Level Order Traversal</a><a hidden class="anchor" aria-hidden="true" href="#429-n-ary-tree-level-order-traversal">#</a></h3>
+<p>遍历所有小孩instead of左孩子和右孩子</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">levelOrder</span>(Node root) {
+</span></span><span style="display:flex;"><span>        traverse(root, 0);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(Node curr, <span style="color:#66d9ef">int</span> level) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (level <span style="color:#f92672">&gt;=</span> res.<span style="color:#a6e22e">size</span>()) {
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        res.<span style="color:#a6e22e">get</span>(level).<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (Node child : curr.<span style="color:#a6e22e">children</span>) {
+</span></span><span style="display:flex;"><span>            traverse(child, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="515-find-largest-value-in-each-tree-row"><a href="https://leetcode.com/problems/find-largest-value-in-each-tree-row/">515. Find Largest Value in Each Tree Row</a><a hidden class="anchor" aria-hidden="true" href="#515-find-largest-value-in-each-tree-row">#</a></h3>
+<p>同637,记录最大值 instead of 算平均值</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">largestValues</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">&gt;</span> res <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> max <span style="color:#f92672">=</span> Integer.<span style="color:#a6e22e">MIN_VALUE</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0; i <span style="color:#f92672">&lt;</span> levelSize; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                max <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">max</span>(max, curr.<span style="color:#a6e22e">val</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            res.<span style="color:#a6e22e">add</span>(max);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="116-populating-next-right-pointers-in-each-node"><a href="https://leetcode.com/problems/populating-next-right-pointers-in-each-node/">116. Populating Next Right Pointers in Each Node</a><a hidden class="anchor" aria-hidden="true" href="#116-populating-next-right-pointers-in-each-node">#</a></h3>
+<p>queue approach: curr -&gt; queue.peek</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Node <span style="color:#a6e22e">connect</span>(Node root) {
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>Node<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span>(levelSize<span style="color:#f92672">--</span> <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                Node curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (levelSize <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                    curr.<span style="color:#a6e22e">next</span> <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">peek</span>();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> root;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>recursion</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Node <span style="color:#a6e22e">connect</span>(Node root) {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">if</span> (root<span style="color:#f92672">==</span><span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        helper(root.<span style="color:#a6e22e">left</span>, root.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> root; 
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">helper</span>(Node n1, Node n2) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (n1 <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> n2 <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        n1.<span style="color:#a6e22e">next</span> <span style="color:#f92672">=</span> n2;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 这里的顺序无所谓，但是会重复连接不够efficient</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 这题的前提是：perfect binary tree！！</span>
+</span></span><span style="display:flex;"><span>        helper(n1.<span style="color:#a6e22e">left</span>, n1.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>        helper(n1.<span style="color:#a6e22e">right</span>, n2.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>        helper(n2.<span style="color:#a6e22e">left</span>, n2.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="117-populating-next-right-pointers-in-each-node-ii"><a href="https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/">117. Populating Next Right Pointers in Each Node II</a><a hidden class="anchor" aria-hidden="true" href="#117-populating-next-right-pointers-in-each-node-ii">#</a></h3>
+<p>跟上题一模一样的代码，但是不能用recursion</p>
+<h3 id="104-maximum-depth-of-binary-tree"><a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/">104. Maximum Depth of Binary Tree</a><a hidden class="anchor" aria-hidden="true" href="#104-maximum-depth-of-binary-tree">#</a></h3>
+<p>recursion</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    Integer max <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">maxDepth</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        traverse(root, 0);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> max;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">traverse</span>(TreeNode curr, <span style="color:#66d9ef">int</span> level) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (curr <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        max <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">max</span>(max, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">left</span>, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>        traverse(curr.<span style="color:#a6e22e">right</span>, level<span style="color:#f92672">+</span>1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>iteration的话BFS更合适，因为它自带level数据(用一个counter记录level即可)，DFS的话还得额外用一个queue来记录level</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">maxDepth</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> level <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            level<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span>(levelSize<span style="color:#f92672">--</span> <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> level;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="111-minimum-depth-of-binary-tree"><a href="https://leetcode.com/problems/minimum-depth-of-binary-tree/">111. Minimum Depth of Binary Tree</a><a hidden class="anchor" aria-hidden="true" href="#111-minimum-depth-of-binary-tree">#</a></h3>
+<p>recursion: minDepth = min(左孩子minDepth，右孩子minDepth)+1</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">minDepth</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> left <span style="color:#f92672">=</span> minDepth(root.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> right <span style="color:#f92672">=</span> minDepth(root.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// left/right could be 0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (left <span style="color:#f92672">==</span> 0 <span style="color:#f92672">||</span> right <span style="color:#f92672">==</span> 0) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> left <span style="color:#f92672">+</span> right <span style="color:#f92672">+</span> 1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> Math.<span style="color:#a6e22e">min</span>(left, right) <span style="color:#f92672">+</span> 1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>iteration: 一旦遇到无孩节点，一定就已经遇到了最小深度，直接返回</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">minDepth</span>(TreeNode root) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (root <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span>        Queue<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> queue <span style="color:#f92672">=</span>  <span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        queue.<span style="color:#a6e22e">add</span>(root);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> level <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>queue.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            level<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> levelSize <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (levelSize<span style="color:#f92672">--</span> <span style="color:#f92672">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                TreeNode curr <span style="color:#f92672">=</span> queue.<span style="color:#a6e22e">poll</span>();
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> level;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">left</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (curr.<span style="color:#a6e22e">right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) queue.<span style="color:#a6e22e">add</span>(curr.<span style="color:#a6e22e">right</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1; <span style="color:#75715e">// won&#39;t reach here</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div>
 
   </div>
@@ -124,7 +754,26 @@ asdljfahs
   <footer class="post-footer">
     <ul class="post-tags">
     </ul>
-  </footer>
+  </footer><div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_16Z9akCcbJ" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </article>
     </main>
     

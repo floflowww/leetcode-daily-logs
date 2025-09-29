@@ -5,3 +5,9 @@ theme= 'PaperMod'
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
+[services]
+  [services.disqus]
+    shortname = 'disqus_16Z9akCcbJ'
+[params]
+  comments = true
+  

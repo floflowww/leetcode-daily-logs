@@ -13,9 +13,29 @@
       <link>http://localhost:1313/posts/day13-binary-tree/</link>
       <pubDate>Sun, 28 Sep 2025 16:29:22 -0700</pubDate>
       <guid>http://localhost:1313/posts/day13-binary-tree/</guid>
-      <description>&lt;p&gt;hi&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;asdljfahs
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <description>&lt;p&gt;medium把我封了。。。。申诉也没人理我&lt;/p&gt;
+&lt;p&gt;本来想用wix之类的别的网站，但是我怕它们又莫名其妙封我，干脆自己建了一个小小的博客，反正全是static pages。不过不能用我的大号建repo，因为公司有很多开源的东西用的个人账号，所以同事们都能看到我在做啥（x&lt;/p&gt;
+&lt;p&gt;甚至还可以评论：Hugo ships with support for Disqus, a third-party service that provides comment and community capabilities to websites via JavaScript.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;今天复习二叉树！&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;完全二叉树&lt;/strong&gt;：除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层&lt;em&gt;最左边&lt;/em&gt;的若干位置&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;二叉搜索树&lt;/strong&gt;： &lt;code&gt;leftChild.val &amp;lt; curr.val &amp;lt; rightChild.val&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;平衡二叉搜索树&lt;/strong&gt;：&lt;code&gt;|leftChild.height - rightChild.height| &amp;lt;= 1&lt;/code&gt; for every node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;二叉树的存储方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;链式存储&lt;/strong&gt;：通过指针把分布在各个地址的节点串联一起&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;顺序存储&lt;/strong&gt;：用数组来存储。如果父节点的数组下标是 i，那么它的左孩子就是 &lt;code&gt;i * 2 + 1&lt;/code&gt;，右孩子就是 &lt;code&gt;i * 2 + 2&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;二叉树的遍历方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;DFS&lt;/strong&gt;：preorder, postorder, inorder&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;BFS&lt;/strong&gt;：level order&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;144, 145, 94 (basic DFS)&lt;/p&gt;
+&lt;p&gt;102, 107, 199, 637, 429, 515, 116, 117, 104, 111 (BFS)&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
