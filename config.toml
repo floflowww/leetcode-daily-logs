@@ -1,4 +1,7 @@
-baseURL = 'https://hi.io'
+baseURL = 'https://flo-leetcode.github.io'
 languageCode = 'en-us'
 title = 'Flo Leetcode 算法营 Blog'
 theme= 'PaperMod'
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
