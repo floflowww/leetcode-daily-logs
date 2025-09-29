@@ -1,0 +1,4 @@
+[submodule "lcblog/public"]
+	path = lcblog/public
+	url = https://github.com/floflowww/flo-leetcode.github.io.git
+	branch = main

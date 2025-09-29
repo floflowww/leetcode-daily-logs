@@ -1,0 +1,1 @@
+This is a Hugo-based blog repository to publish leetcode practice progress.
